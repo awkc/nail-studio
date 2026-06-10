@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BookingApp — Онлайн запись</title>
+<title>BookMe — Онлайн запись</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -16,8 +16,10 @@
   --gray-50: #F9FAFB;
   --gray-100: #F3F4F6;
   --gray-200: #E5E7EB;
+  --gray-300: #D1D5DB;
   --gray-400: #9CA3AF;
   --gray-500: #6B7280;
+  --gray-600: #4B5563;
   --gray-700: #374151;
   --gray-900: #111827;
   --green: #059669;
@@ -26,10 +28,9 @@
   --yellow-light: #FEF3C7;
   --red: #DC2626;
   --red-light: #FEE2E2;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-  --shadow: 0 4px 16px rgba(124,58,237,0.10);
-  --shadow-lg: 0 8px 32px rgba(124,58,237,0.15);
-  --radius: 16px;
+  --shadow: 0 4px 20px rgba(124,58,237,0.10);
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.07);
+  --radius: 18px;
   --radius-sm: 10px;
 }
 
@@ -40,757 +41,589 @@ body {
   min-height: 100vh;
 }
 
-/* SCROLLBAR */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--gray-100); }
+::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-thumb { background: var(--primary-light); border-radius: 3px; }
 
 /* HEADER */
 .header {
   background: var(--white);
   border-bottom: 1px solid var(--gray-200);
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  backdrop-filter: blur(10px);
+  position: sticky; top: 0; z-index: 100;
 }
 .header-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  max-width: 1280px; margin: 0 auto;
+  padding: 0 28px; height: 66px;
+  display: flex; align-items: center; justify-content: space-between;
 }
 .logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--primary);
+  display: flex; align-items: center; gap: 10px;
+  font-size: 21px; font-weight: 800; color: var(--primary);
 }
-.logo-icon {
-  width: 36px; height: 36px;
+.logo-box {
+  width: 38px; height: 38px;
   background: linear-gradient(135deg, var(--primary), var(--primary-mid));
-  border-radius: 10px;
+  border-radius: 11px;
   display: flex; align-items: center; justify-content: center;
-  color: white; font-size: 18px;
+  font-size: 20px;
 }
-.header-badge {
-  background: var(--primary-light);
-  color: var(--primary);
-  padding: 4px 14px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
+.header-pill {
+  background: var(--primary-light); color: var(--primary);
+  padding: 5px 16px; border-radius: 20px;
+  font-size: 13px; font-weight: 700;
 }
 
 /* LAYOUT */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 32px 24px;
+.app {
+  max-width: 1280px; margin: 0 auto;
+  padding: 32px 28px;
   display: grid;
-  grid-template-columns: 420px 1fr;
-  gap: 28px;
-  align-items: start;
+  grid-template-columns: 400px 1fr;
+  gap: 28px; align-items: start;
 }
 
-/* PANEL */
-.panel {
+/* CARD */
+.card {
   background: var(--white);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
+  border: 1px solid var(--gray-100);
   overflow: hidden;
 }
-.panel-header {
-  padding: 20px 24px 16px;
+.card-header {
+  padding: 20px 24px 18px;
   border-bottom: 1px solid var(--gray-100);
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  display: flex; align-items: center; gap: 10px;
 }
-.panel-header h2 {
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--gray-900);
-}
-.panel-icon {
+.card-header h2 { font-size: 16px; font-weight: 700; }
+.card-icon {
   width: 34px; height: 34px;
-  background: var(--primary-light);
-  border-radius: 9px;
+  background: var(--primary-light); border-radius: 9px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
+  font-size: 17px;
 }
-.panel-body { padding: 20px 24px; }
+.card-body { padding: 22px 24px; }
 
 /* CALENDAR */
-.cal-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
+.cal-top {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-bottom: 18px;
 }
-.cal-nav h3 {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--gray-900);
-  text-transform: capitalize;
-}
-.cal-btn {
+.cal-top h3 { font-size: 15px; font-weight: 700; text-transform: capitalize; }
+.cal-arrow {
   width: 32px; height: 32px;
-  border: 1px solid var(--gray-200);
-  border-radius: 8px;
-  background: var(--white);
-  cursor: pointer;
-  font-size: 16px;
+  border: 1.5px solid var(--gray-200); border-radius: 8px;
+  background: var(--white); cursor: pointer; font-size: 17px;
   display: flex; align-items: center; justify-content: center;
-  color: var(--gray-700);
-  transition: all 0.2s;
+  color: var(--gray-700); transition: all .18s;
 }
-.cal-btn:hover {
+.cal-arrow:hover {
   background: var(--primary-light);
-  border-color: var(--primary);
-  color: var(--primary);
+  border-color: var(--primary); color: var(--primary);
 }
-.cal-weekdays {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  margin-bottom: 8px;
+.wdays { display: grid; grid-template-columns: repeat(7,1fr); margin-bottom: 6px; }
+.wday {
+  text-align: center; font-size: 11px; font-weight: 700;
+  color: var(--gray-400); padding: 4px 0;
+  letter-spacing: .5px; text-transform: uppercase;
 }
-.cal-weekday {
-  text-align: center;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--gray-400);
-  padding: 4px 0;
-}
-.cal-days {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 3px;
-}
-.cal-day {
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 9px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.18s;
+.days { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; }
+.day {
+  aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+  border-radius: 9px; font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all .15s;
   border: 1.5px solid transparent;
-  color: var(--gray-700);
-  position: relative;
+  color: var(--gray-700); position: relative; user-select: none;
 }
-.cal-day:hover:not(.empty):not(.past) {
-  background: var(--primary-light);
-  color: var(--primary);
+.day:hover:not(.empty):not(.past) {
+  background: var(--primary-light); color: var(--primary);
 }
-.cal-day.today {
-  border-color: var(--primary);
-  color: var(--primary);
-  font-weight: 700;
+.day.today { border-color: var(--primary); color: var(--primary); font-weight: 700; }
+.day.selected {
+  background: var(--primary); color: #fff;
+  border-color: var(--primary); font-weight: 700;
+  box-shadow: 0 2px 10px rgba(124,58,237,.35);
 }
-.cal-day.selected {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
-  font-weight: 700;
-  box-shadow: 0 2px 8px rgba(124,58,237,0.35);
+.day.past { color: var(--gray-300); cursor: not-allowed; }
+.day.empty { cursor: default; }
+.day.has-dot::after {
+  content: ''; position: absolute; bottom: 3px;
+  width: 4px; height: 4px; border-radius: 50%; background: var(--primary-mid);
 }
-.cal-day.past { color: var(--gray-200); cursor: not-allowed; }
-.cal-day.empty { cursor: default; }
-.cal-day.has-bookings::after {
-  content: '';
-  position: absolute;
-  bottom: 3px;
-  width: 4px; height: 4px;
-  border-radius: 50%;
-  background: var(--primary-mid);
-}
-.cal-day.selected.has-bookings::after { background: white; }
+.day.selected.has-dot::after { background: rgba(255,255,255,.7); }
 
-/* TIME SLOTS */
-.slots-wrap { margin-top: 20px; }
-.slots-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--gray-500);
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+/* SLOTS */
+.slots-section { margin-top: 22px; }
+.slots-top {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-bottom: 10px;
 }
-.slot-tabs {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 12px;
+.slots-title {
+  font-size: 12px; font-weight: 700;
+  color: var(--gray-500); text-transform: uppercase; letter-spacing: .6px;
 }
-.slot-tab {
-  padding: 5px 14px;
-  border-radius: 20px;
+.dur-tabs { display: flex; gap: 5px; }
+.dur-tab {
+  padding: 4px 12px; border-radius: 20px;
   border: 1.5px solid var(--gray-200);
-  background: white;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  color: var(--gray-500);
-  transition: all 0.18s;
+  background: var(--white); font-size: 12px; font-weight: 600;
+  cursor: pointer; color: var(--gray-500); transition: all .15s;
 }
-.slot-tab.active {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: white;
-}
+.dur-tab.active { background: var(--primary); border-color: var(--primary); color: #fff; }
 .slots-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 7px;
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 7px;
 }
 .slot {
-  padding: 9px 4px;
-  text-align: center;
-  border-radius: 9px;
-  border: 1.5px solid var(--gray-200);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.18s;
-  color: var(--gray-700);
-  background: white;
+  padding: 9px 0; text-align: center; border-radius: 9px;
+  border: 1.5px solid var(--gray-200); font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all .15s;
+  color: var(--gray-700); background: var(--white); user-select: none;
 }
-.slot:hover:not(.booked) {
-  border-color: var(--primary);
-  color: var(--primary);
-  background: var(--primary-light);
+.slot:hover:not(.taken) {
+  border-color: var(--primary); color: var(--primary); background: var(--primary-light);
 }
-.slot.selected {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
-  box-shadow: 0 2px 8px rgba(124,58,237,0.3);
+.slot.chosen {
+  background: var(--primary); color: #fff;
+  border-color: var(--primary); box-shadow: 0 2px 8px rgba(124,58,237,.3);
 }
-.slot.booked {
-  background: var(--gray-100);
-  color: var(--gray-400);
-  cursor: not-allowed;
-  text-decoration: line-through;
+.slot.taken {
+  background: var(--gray-100); color: var(--gray-300);
+  cursor: not-allowed; text-decoration: line-through;
+}
+.no-date-msg {
+  text-align: center; padding: 20px 0;
+  color: var(--gray-400); font-size: 13px;
 }
 
 /* FORM */
-.form-group { margin-bottom: 16px; }
-.form-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--gray-700);
-  margin-bottom: 6px;
+.info-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 11px 14px; border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 500; margin-bottom: 18px;
 }
-.form-label span { color: var(--primary); }
-.form-input, .form-select {
-  width: 100%;
-  padding: 11px 14px;
-  border: 1.5px solid var(--gray-200);
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  color: var(--gray-900);
-  background: white;
-  transition: all 0.2s;
-  font-family: inherit;
-  outline: none;
-  appearance: none;
+.info-bar.empty { background: var(--gray-100); color: var(--gray-400); }
+.info-bar.filled { background: var(--primary-light); color: var(--primary-dark); }
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.fgroup { margin-bottom: 14px; }
+.flabel {
+  display: block; font-size: 12px; font-weight: 700;
+  color: var(--gray-600); margin-bottom: 6px;
+  text-transform: uppercase; letter-spacing: .4px;
 }
-.form-input:focus, .form-select:focus {
+.flabel em { color: var(--primary); font-style: normal; }
+.finput, .fselect {
+  width: 100%; padding: 11px 13px;
+  border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm);
+  font-size: 14px; color: var(--gray-900);
+  background: var(--white); transition: all .18s;
+  font-family: inherit; outline: none; appearance: none;
+}
+.finput:focus, .fselect:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
+  box-shadow: 0 0 0 3px rgba(124,58,237,.10);
 }
-.form-input::placeholder { color: var(--gray-400); }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.finput::placeholder { color: var(--gray-400); }
+.finput.err, .fselect.err { border-color: var(--red); }
 
-.selected-info {
-  background: var(--primary-light);
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  margin-bottom: 16px;
-  font-size: 13px;
-  color: var(--primary-dark);
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.selected-info.empty {
-  background: var(--gray-100);
-  color: var(--gray-400);
-}
-
-.btn-submit {
-  width: 100%;
-  padding: 13px;
+.btn-book {
+  width: 100%; padding: 13px;
   background: linear-gradient(135deg, var(--primary), var(--primary-mid));
-  color: white;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.25s;
-  font-family: inherit;
-  letter-spacing: 0.2px;
+  color: #fff; border: none; border-radius: var(--radius-sm);
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  transition: all .22s; font-family: inherit;
 }
-.btn-submit:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(124,58,237,0.35);
+.btn-book:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(124,58,237,.38);
 }
-.btn-submit:active { transform: translateY(0); }
-.btn-submit:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
+.btn-book:active:not(:disabled) { transform: translateY(0); }
+.btn-book:disabled { opacity: .45; cursor: not-allowed; }
 
 /* RIGHT COLUMN */
-.right-col { display: flex; flex-direction: column; gap: 20px; }
+.right { display: flex; flex-direction: column; gap: 22px; }
 
 /* STATS */
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-}
+.stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
 .stat {
-  background: var(--white);
-  border-radius: var(--radius);
-  padding: 18px 16px;
-  box-shadow: var(--shadow-sm);
-  text-align: center;
-  border: 1px solid var(--gray-100);
-  transition: transform 0.2s;
+  background: var(--white); border-radius: var(--radius);
+  padding: 18px 16px; text-align: center;
+  box-shadow: var(--shadow-sm); border: 1px solid var(--gray-100);
+  transition: transform .2s, box-shadow .2s;
 }
-.stat:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
-.stat-num {
-  font-size: 26px;
-  font-weight: 800;
-  color: var(--primary);
-  line-height: 1;
-  margin-bottom: 4px;
-}
-.stat-label { font-size: 12px; color: var(--gray-400); font-weight: 500; }
+.stat:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.stat-n { font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+.stat-l { font-size: 12px; color: var(--gray-400); font-weight: 500; }
 
-/* BOOKINGS LIST */
-.bookings-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 4px;
+/* TOOLBAR */
+.bk-toolbar { padding: 0 24px 14px; display: flex; flex-direction: column; gap: 10px; }
+.bk-search { position: relative; }
+.bk-search input {
+  width: 100%; padding: 9px 13px 9px 36px;
+  border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm);
+  font-size: 13px; outline: none; font-family: inherit;
+  background: var(--gray-50); color: var(--gray-900); transition: all .18s;
 }
-.filter-row {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  padding: 0 24px 16px;
+.bk-search input:focus { border-color: var(--primary); background: #fff; }
+.bk-search-ic {
+  position: absolute; left: 11px; top: 50%;
+  transform: translateY(-50%); color: var(--gray-400);
+  font-size: 14px; pointer-events: none;
 }
-.filter-btn {
-  padding: 5px 14px;
-  border-radius: 20px;
-  border: 1.5px solid var(--gray-200);
-  background: white;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  color: var(--gray-500);
-  transition: all 0.18s;
+.filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.fil {
+  padding: 5px 14px; border-radius: 20px;
+  border: 1.5px solid var(--gray-200); background: var(--white);
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  color: var(--gray-500); transition: all .15s;
 }
-.filter-btn.active {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: white;
+.fil.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+.sort-row {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: var(--gray-400);
 }
-.search-wrap {
-  padding: 0 24px 16px;
+.sort-row select {
+  padding: 4px 8px; border-radius: 7px;
+  border: 1.5px solid var(--gray-200); font-size: 12px;
+  font-family: inherit; outline: none;
+  background: var(--white); color: var(--gray-700); cursor: pointer;
 }
-.search-input {
-  width: 100%;
-  padding: 9px 14px 9px 36px;
-  border: 1.5px solid var(--gray-200);
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  outline: none;
-  font-family: inherit;
-  background: var(--gray-50) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%239CA3AF' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.156a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E") no-repeat 12px center;
-  transition: border-color 0.2s;
-  color: var(--gray-900);
-}
-.search-input:focus { border-color: var(--primary); }
+.sort-row select:focus { border-color: var(--primary); }
 
-.bookings-list { padding: 0 24px 24px; }
-.booking-card {
-  background: var(--white);
-  border: 1.5px solid var(--gray-100);
-  border-radius: var(--radius-sm);
-  padding: 16px;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  transition: all 0.2s;
-  animation: slideIn 0.3s ease;
+/* BOOKING LIST */
+.bk-list {
+  padding: 0 24px 24px;
+  max-height: 540px; overflow-y: auto;
 }
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: translateY(0); }
+.bk-list::-webkit-scrollbar { width: 4px; }
+.bk-list::-webkit-scrollbar-thumb { background: var(--primary-light); border-radius: 2px; }
+
+/* BOOKING CARD */
+.bk-card {
+  display: flex; align-items: flex-start; gap: 13px;
+  padding: 15px; border: 1.5px solid var(--gray-100);
+  border-radius: var(--radius-sm); margin-bottom: 9px;
+  transition: all .2s; background: var(--white);
+  animation: fadeUp .28s ease;
 }
-.booking-card:hover {
-  border-color: var(--primary-light);
-  box-shadow: var(--shadow);
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(-6px); }
+  to   { opacity:1; transform:translateY(0); }
 }
-.booking-card.deleting {
-  animation: fadeOut 0.3s ease forwards;
+.bk-card:hover { border-color: var(--primary-light); box-shadow: var(--shadow); }
+.bk-card.removing {
+  animation: slideOut .3s ease forwards;
 }
-@keyframes fadeOut {
-  to { opacity: 0; transform: translateX(20px); height: 0; padding: 0; margin: 0; }
+@keyframes slideOut {
+  to { opacity:0; transform:translateX(20px); max-height:0; padding:0; margin:0; border:none; overflow:hidden; }
 }
 
-.booking-date-pill {
+.date-pill {
   background: linear-gradient(135deg, var(--primary), var(--primary-mid));
-  color: white;
-  border-radius: 10px;
-  padding: 8px 12px;
-  text-align: center;
-  min-width: 52px;
-  flex-shrink: 0;
+  color: #fff; border-radius: 10px; padding: 8px 12px;
+  text-align: center; min-width: 52px; flex-shrink: 0;
 }
-.booking-date-pill .day { font-size: 20px; font-weight: 800; line-height: 1; }
-.booking-date-pill .mon { font-size: 11px; opacity: 0.85; margin-top: 2px; }
+.date-pill .dp-d { font-size: 20px; font-weight: 800; line-height: 1; }
+.date-pill .dp-m { font-size: 10px; opacity: .85; margin-top: 2px; }
 
-.booking-body { flex: 1; min-width: 0; }
-.booking-name {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--gray-900);
-  margin-bottom: 3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.bk-body { flex: 1; min-width: 0; }
+.bk-name {
+  font-size: 15px; font-weight: 700; color: var(--gray-900);
+  margin-bottom: 4px; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
 }
-.booking-details {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 8px;
+.bk-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.bk-meta span {
+  font-size: 12px; color: var(--gray-500);
+  display: flex; align-items: center; gap: 3px;
 }
-.booking-detail {
-  font-size: 12px;
-  color: var(--gray-500);
-  display: flex;
-  align-items: center;
-  gap: 3px;
+.bk-comment {
+  font-size: 12px; color: var(--gray-400); font-style: italic;
+  margin-bottom: 8px; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
 }
+.bk-foot { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
-.booking-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-/* STATUS BADGE */
+/* BADGE */
 .badge {
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
-  white-space: nowrap;
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 700; white-space: nowrap;
 }
 .badge-confirmed { background: var(--green-light); color: var(--green); }
-.badge-pending { background: var(--yellow-light); color: var(--yellow); }
+.badge-pending   { background: var(--yellow-light); color: var(--yellow); }
 .badge-cancelled { background: var(--red-light); color: var(--red); }
 
-/* STATUS SELECT */
-.status-select {
-  padding: 4px 8px;
-  border-radius: 20px;
-  border: 1.5px solid var(--gray-200);
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  outline: none;
-  font-family: inherit;
-  background: white;
-  color: var(--gray-700);
-  transition: border-color 0.2s;
+.status-sel {
+  padding: 4px 8px; border-radius: 20px;
+  border: 1.5px solid var(--gray-200); font-size: 11px;
+  font-weight: 600; cursor: pointer; outline: none;
+  font-family: inherit; background: var(--white);
+  color: var(--gray-700); transition: border-color .15s;
 }
-.status-select:focus { border-color: var(--primary); }
+.status-sel:focus { border-color: var(--primary); }
 
-/* DELETE BTN */
-.btn-delete {
-  width: 30px; height: 30px;
-  border-radius: 8px;
-  border: 1.5px solid var(--gray-200);
-  background: white;
-  cursor: pointer;
-  font-size: 14px;
+.btn-del {
+  width: 28px; height: 28px; border-radius: 7px;
+  border: 1.5px solid var(--gray-200); background: var(--white);
+  cursor: pointer; font-size: 13px;
   display: flex; align-items: center; justify-content: center;
-  transition: all 0.18s;
-  color: var(--gray-400);
-  flex-shrink: 0;
+  transition: all .15s; color: var(--gray-400);
+  margin-left: auto; flex-shrink: 0;
 }
-.btn-delete:hover {
-  background: var(--red-light);
-  border-color: var(--red);
-  color: var(--red);
-}
+.btn-del:hover { background: var(--red-light); border-color: var(--red); color: var(--red); }
 
-/* EMPTY STATE */
-.empty {
-  text-align: center;
-  padding: 48px 20px;
-  color: var(--gray-400);
-}
-.empty-icon { font-size: 48px; margin-bottom: 12px; }
-.empty h3 { font-size: 16px; font-weight: 600; color: var(--gray-500); margin-bottom: 6px; }
+/* EMPTY */
+.empty { text-align: center; padding: 52px 20px; color: var(--gray-400); }
+.empty-ic { font-size: 52px; margin-bottom: 12px; }
+.empty h3 { font-size: 16px; font-weight: 700; color: var(--gray-500); margin-bottom: 6px; }
 .empty p { font-size: 13px; }
 
 /* TOAST */
-.toast-wrap {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 999;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+#toastArea {
+  position: fixed; bottom: 24px; right: 24px;
+  z-index: 9999; display: flex; flex-direction: column; gap: 8px;
 }
 .toast {
-  background: var(--gray-900);
-  color: white;
-  padding: 12px 18px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 500;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  animation: toastIn 0.35s ease;
-  max-width: 300px;
+  padding: 13px 18px; border-radius: 12px;
+  font-size: 14px; font-weight: 600; color: #fff;
+  box-shadow: 0 8px 24px rgba(0,0,0,.18);
+  display: flex; align-items: center; gap: 9px;
+  animation: toastIn .3s ease; max-width: 310px;
 }
 @keyframes toastIn {
-  from { opacity: 0; transform: translateY(12px) scale(0.95); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity:0; transform:translateY(10px) scale(.96); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
 }
 .toast.success { background: #065F46; }
-.toast.error { background: #991B1B; }
+.toast.error   { background: #991B1B; }
+.toast.info    { background: var(--primary-dark); }
 
 /* MODAL */
-.modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.45);
-  z-index: 200;
-  display: flex; align-items: center; justify-content: center;
-  padding: 20px;
-  animation: fadeOverlay 0.2s ease;
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.42);
+  z-index: 500; display: flex; align-items: center;
+  justify-content: center; padding: 20px; animation: ovIn .2s;
 }
-@keyframes fadeOverlay {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
+@keyframes ovIn { from{opacity:0} to{opacity:1} }
 .modal {
-  background: white;
-  border-radius: var(--radius);
-  padding: 28px;
-  max-width: 380px;
-  width: 100%;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-  animation: modalIn 0.25s ease;
+  background: var(--white); border-radius: var(--radius);
+  padding: 30px; max-width: 370px; width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,.22); animation: mdIn .22s ease;
 }
-@keyframes modalIn {
-  from { opacity: 0; transform: scale(0.92) translateY(8px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
+@keyframes mdIn {
+  from { opacity:0; transform:scale(.93) translateY(8px); }
+  to   { opacity:1; transform:scale(1) translateY(0); }
 }
-.modal h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
-.modal p { font-size: 14px; color: var(--gray-500); margin-bottom: 22px; }
+.modal h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+.modal p  { font-size: 14px; color: var(--gray-500); margin-bottom: 24px; }
 .modal-btns { display: flex; gap: 10px; }
-.btn-cancel-modal {
-  flex: 1; padding: 11px;
-  border: 1.5px solid var(--gray-200);
-  border-radius: var(--radius-sm);
-  background: white; cursor: pointer;
-  font-size: 14px; font-weight: 600;
-  font-family: inherit; color: var(--gray-700);
-  transition: all 0.18s;
+.btn-mcancel {
+  flex:1; padding: 11px; border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm); background: var(--white);
+  cursor: pointer; font-size: 14px; font-weight: 600;
+  font-family: inherit; color: var(--gray-700); transition: all .15s;
 }
-.btn-cancel-modal:hover { border-color: var(--gray-400); }
-.btn-confirm-delete {
-  flex: 1; padding: 11px;
-  border: none;
-  border-radius: var(--radius-sm);
-  background: var(--red); cursor: pointer;
-  font-size: 14px; font-weight: 600;
-  font-family: inherit; color: white;
-  transition: all 0.18s;
+.btn-mcancel:hover { border-color: var(--gray-400); }
+.btn-mdelete {
+  flex:1; padding: 11px; border: none;
+  border-radius: var(--radius-sm); background: var(--red);
+  cursor: pointer; font-size: 14px; font-weight: 700;
+  font-family: inherit; color: #fff; transition: background .15s;
 }
-.btn-confirm-delete:hover { background: #B91C1C; }
+.btn-mdelete:hover { background: #B91C1C; }
 
 /* RESPONSIVE */
-@media (max-width: 900px) {
-  .container { grid-template-columns: 1fr; }
-  .stats-row { grid-template-columns: repeat(2, 1fr); }
+@media(max-width:960px) {
+  .app { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2,1fr); }
 }
-@media (max-width: 480px) {
-  .container { padding: 16px; }
+@media(max-width:520px) {
+  .app { padding: 14px; }
   .header-inner { padding: 0 16px; }
-  .slots-grid { grid-template-columns: repeat(3, 1fr); }
-  .stats-row { grid-template-columns: repeat(2, 1fr); }
-  .form-row { grid-template-columns: 1fr; }
-  .booking-actions { flex-direction: column; align-items: flex-end; }
+  .slots-grid { grid-template-columns: repeat(3,1fr); }
+  .frow { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2,1fr); }
 }
 </style>
 </head>
 <body>
 
-<!-- TOASTS -->
-<div class="toast-wrap" id="toastWrap"></div>
-
-<!-- MODAL -->
-<div class="modal-overlay" id="modalOverlay" style="display:none">
-  <div class="modal">
-    <h3>🗑️ Удалить запись?</h3>
-    <p>Это действие нельзя отменить. Запись будет удалена навсегда.</p>
-    <div class="modal-btns">
-      <button class="btn-cancel-modal" onclick="closeModal()">Отмена</button>
-      <button class="btn-confirm-delete" onclick="confirmDelete()">Удалить</button>
-    </div>
-  </div>
-</div>
+<div id="toastArea"></div>
+<div id="overlayWrap"></div>
 
 <!-- HEADER -->
 <header class="header">
   <div class="header-inner">
     <div class="logo">
-      <div class="logo-icon">📅</div>
-      BookingApp
+      <div class="logo-box">📅</div>
+      BookMe
     </div>
-    <div class="header-badge" id="headerBadge">0 записей</div>
+    <div class="header-pill" id="hPill">0 записей</div>
   </div>
 </header>
 
-<!-- MAIN -->
-<div class="container">
+<!-- APP -->
+<div class="app">
 
-  <!-- LEFT: CALENDAR + FORM -->
-  <div style="display:flex;flex-direction:column;gap:20px">
+  <!-- ══ LEFT ══ -->
+  <div style="display:flex;flex-direction:column;gap:22px">
 
     <!-- CALENDAR -->
-    <div class="panel">
-      <div class="panel-header">
-        <div class="panel-icon">🗓️</div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🗓️</div>
         <h2>Выберите дату</h2>
       </div>
-      <div class="panel-body">
-        <div class="cal-nav">
-          <button class="cal-btn" onclick="changeMonth(-1)">‹</button>
+      <div class="card-body">
+        <div class="cal-top">
+          <button class="cal-arrow" id="btnPrev">‹</button>
           <h3 id="calTitle"></h3>
-          <button class="cal-btn" onclick="changeMonth(1)">›</button>
+          <button class="cal-arrow" id="btnNext">›</button>
         </div>
-        <div class="cal-weekdays">
-          <div class="cal-weekday">Пн</div>
-          <div class="cal-weekday">Вт</div>
-          <div class="cal-weekday">Ср</div>
-          <div class="cal-weekday">Чт</div>
-          <div class="cal-weekday">Пт</div>
-          <div class="cal-weekday">Сб</div>
-          <div class="cal-weekday">Вс</div>
-        </div>
-        <div class="cal-days" id="calDays"></div>
+        <div class="wdays" id="wdays"></div>
+        <div class="days" id="calDays"></div>
 
-        <!-- TIME SLOTS -->
-        <div class="slots-wrap">
-          <div class="slots-label">Время приёма</div>
-          <div class="slot-tabs">
-            <button class="slot-tab active" onclick="setSlotSize(30, this)">30 мин</button>
-            <button class="slot-tab" onclick="setSlotSize(60, this)">60 мин</button>
+        <div class="slots-section">
+          <div class="slots-top">
+            <div class="slots-title">Доступное время</div>
+            <div class="dur-tabs" id="durTabs">
+              <button class="dur-tab active" data-dur="30">30 мин</button>
+              <button class="dur-tab" data-dur="60">60 мин</button>
+            </div>
           </div>
-          <div class="slots-grid" id="slotsGrid"></div>
+          <div id="slotsWrap"></div>
         </div>
       </div>
     </div>
 
     <!-- FORM -->
-    <div class="panel">
-      <div class="panel-header">
-        <div class="panel-icon">✍️</div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">✍️</div>
         <h2>Данные клиента</h2>
       </div>
-      <div class="panel-body">
-
-        <div class="selected-info" id="selectedInfo">
+      <div class="card-body">
+        <div class="info-bar empty" id="infoBar">
           <span>📌</span>
-          <span id="selectedInfoText">Выберите дату и время</span>
+          <span id="infoText">Сначала выберите дату и время</span>
         </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Имя <span>*</span></label>
-            <input class="form-input" id="inputName" type="text" placeholder="Анна Иванова" maxlength="50">
+        <div class="frow">
+          <div class="fgroup">
+            <label class="flabel">Имя <em>*</em></label>
+            <input class="finput" id="iName" placeholder="Анна Иванова" maxlength="50">
           </div>
-          <div class="form-group">
-            <label class="form-label">Телефон <span>*</span></label>
-            <input class="form-input" id="inputPhone" type="tel" placeholder="+7 (999) 000-00-00" maxlength="18">
+          <div class="fgroup">
+            <label class="flabel">Телефон <em>*</em></label>
+            <input class="finput" id="iPhone" placeholder="+7 (999) 000-00-00" maxlength="18">
           </div>
         </div>
-
-        <div class="form-group">
-          <label class="form-label">Услуга <span>*</span></label>
-          <select class="form-select" id="inputService">
+        <div class="fgroup">
+          <label class="flabel">Услуга <em>*</em></label>
+          <select class="fselect" id="iService">
             <option value="">— Выберите услугу —</option>
             <optgroup label="💅 Маникюр">
-              <option value="Классический маникюр">Классический маникюр</option>
-              <option value="Аппаратный маникюр">Аппаратный маникюр</option>
-              <option value="Покрытие гель-лаком">Покрытие гель-лаком</option>
-              <option value="Наращивание ногтей">Наращивание ногтей</option>
-              <option value="Дизайн ногтей">Дизайн ногтей</option>
+              <option>Классический маникюр</option>
+              <option>Аппаратный маникюр</option>
+              <option>Гель-лак</option>
+              <option>Наращивание ногтей</option>
+              <option>Дизайн ногтей</option>
             </optgroup>
             <optgroup label="🦶 Педикюр">
-              <option value="Классический педикюр">Классический педикюр</option>
-              <option value="Аппаратный педикюр">Аппаратный педикюр</option>
-              <option value="СПА-педикюр">СПА-педикюр</option>
+              <option>Классический педикюр</option>
+              <option>Аппаратный педикюр</option>
+              <option>СПА-педикюр</option>
             </optgroup>
             <optgroup label="✨ Комплекс">
-              <option value="Маникюр + Педикюр">Маникюр + Педикюр</option>
-              <option value="Маникюр + Покрытие">Маникюр + Покрытие</option>
+              <option>Маникюр + Педикюр</option>
+              <option>Маникюр + Покрытие</option>
             </optgroup>
             <optgroup label="💆 Уход">
-              <option value="Парафинотерапия рук">Парафинотерапия рук</option>
-              <option value="Укрепление ногтей">Укрепление ногтей</option>
+              <option>Парафинотерапия</option>
+              <option>Укрепление ногтей</option>
             </optgroup>
           </select>
         </div>
-
-        <div class="form-group">
-          <label class="form-label">Комментарий</label>
-          <input class="form-input" id="inputComment" type="text" placeholder="Пожелания или аллергии..." maxlength="100">
+        <div class="fgroup">
+          <label class="flabel">Комментарий</label>
+          <input class="finput" id="iComment" placeholder="Пожелания или аллергии…" maxlength="120">
         </div>
-
-        <button class="btn-submit" id="btnSubmit" onclick="submitBooking()">
-          Записаться
-        </button>
+        <button class="btn-book" id="btnBook">Записаться</button>
       </div>
     </div>
   </div>
 
-  <!-- RIGHT: STATS + LIST -->
-  <div class="right-col">
+  <!-- ══ RIGHT ══ -->
+  <div class="right">
 
     <!-- STATS -->
-    <div class="stats-row">
+    <div class="stats">
       <div class="stat">
-        <div class="stat-num" id="statTotal">0</div>
-        <div class="stat-label">Всего</div>
+        <div class="stat-n" id="sAll" style="color:var(--primary)">0</div>
+        <div class="stat-l">Всего</div>
       </div>
       <div class="stat">
-        <div class="stat-num" id="statConfirmed" style="color:var(--green)">
+        <div class="stat-n" id="sCon" style="color:var(--green)">0</div>
+        <div class="stat-l">Подтверждено</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n" id="sPen" style="color:var(--yellow)">0</div>
+        <div class="stat-l">Ожидает</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n" id="sCan" style="color:var(--red)">0</div>
+        <div class="stat-l">Отменено</div>
+      </div>
+    </div>
+
+    <!-- BOOKINGS -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">📋</div>
+        <h2>Все записи</h2>
+      </div>
+
+      <div class="bk-toolbar">
+        <div class="bk-search">
+          <span class="bk-search-ic">🔍</span>
+          <input type="text" id="searchInput" placeholder="Поиск по имени, услуге, телефону…">
+        </div>
+        <div class="filters" id="filters">
+          <button class="fil active" data-f="all">Все</button>
+          <button class="fil" data-f="pending">Ожидает</button>
+          <button class="fil" data-f="confirmed">Подтверждено</button>
+          <button class="fil" data-f="cancelled">Отменено</button>
+        </div>
+        <div class="sort-row">
+          <span>Сортировка:</span>
+          <select id="sortSel">
+            <option value="newest">Новые сначала</option>
+            <option value="oldest">Старые сначала</option>
+            <option value="name">По имени</option>
+            <option value="date">По дате записи</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="bk-list" id="bkList"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════
+   STATE
+════════════════════════════════════════ */
+let bookings   = JSON.parse(localStorage.getItem('bookme_v2') || '[]');
+let calYear    = new Date().getFullYear();
+let calMonth   = new Date().getMonth();
+let selDate    = null;   // 'YYYY-MM-DD'
+let selTime    = null;   // 'HH:MM'
+let slotDur    = 30;
+let filterStat = 'all';
+let sortMode   = 'newest';
+let searchQ    = '';
+let deleteId   = null;
+
+const MONTHS_RU = ['январь','февраль','март','апрель','май','июнь',
+                   'июль','август','сентябрь','октябрь','ноябрь','декабрь'];
+const MONTHS_SHORT = ['янв','фев','мар','апр','май','июн',
+                      'июл','авг','сен','окт','ноя','дек'];
+const
